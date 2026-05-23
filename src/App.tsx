@@ -1,38 +1,19 @@
-import { useState, useEffect } from 'react'
-
-export interface ResponseValue {
-  Search: Movie[]
-  totalResults: string
-  Response: string
-}
-export interface Movie {
-  Title: string
-  Year: string
-  imdbID: string
-  Poster: string
-  Type: string
-}
+import { useEffect, useRef } from 'react'
 
 export default function App() {
-  const [movies, setMovies] = useState<Movie[]>([])
+  const inputRef = useRef<HTMLInputElement>(null)
 
-  // useEffect(실행할함수, 의존성배열)
   useEffect(function () {
-    async function fetchMovies() {
-      const res = await fetch('https://omdbapi.com/?apikey=7035c60c&s=spider')
-      const data = await res.json()
-      setMovies(data.Search)
-    }
-    fetchMovies()
+    // const inputEl = document.querySelector('input')
+    inputRef.current?.focus()
   }, [])
 
   return (
     <>
-      <ul>
-        {movies.map(function (movie) {
-          return <li key={movie.imdbID}>{movie.Title}</li>
-        })}
-      </ul>
+      <input
+        ref={inputRef}
+        type="text"
+      />
     </>
   )
 }
