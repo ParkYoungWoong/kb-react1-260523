@@ -1,30 +1,38 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-// 리스트 렌더링 = 배열 데이터 출력
+export interface ResponseValue {
+  Search: Movie[]
+  totalResults: string
+  Response: string
+}
+export interface Movie {
+  Title: string
+  Year: string
+  imdbID: string
+  Poster: string
+  Type: string
+}
 
 export default function App() {
-  const [fruits, setFruits] = useState(['apple', 'banana', 'cherry'])
-  const [text, setText] = useState('')
+  const [movies, setMovies] = useState<Movie[]>([])
+
+  // useEffect(실행할함수, 의존성배열)
+  useEffect(function () {
+    async function fetchMovies() {
+      const res = await fetch('https://omdbapi.com/?apikey=7035c60c&s=spider')
+      const data = await res.json()
+      setMovies(data.Search)
+    }
+    fetchMovies()
+  }, [])
 
   return (
     <>
-      <input
-        type="text"
-        defaultValue={text}
-      />
-      <button
-        onClick={function () {
-          setFruits([...fruits, 'orange'])
-        }}>
-        추가!
-      </button>
       <ul>
-        {fruits.map(function (fruit) {
-          return <li key={fruit}>{fruit}</li>
+        {movies.map(function (movie) {
+          return <li key={movie.imdbID}>{movie.Title}</li>
         })}
       </ul>
     </>
   )
 }
-
-// 3시 14분까지 쉬는 시간입니다.
