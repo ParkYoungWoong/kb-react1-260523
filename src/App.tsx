@@ -1,46 +1,15 @@
-import { useState, useEffect } from 'react'
-
-export interface ResponseValue {
-  Search: Movie[]
-  totalResults: string
-  Response: string
-}
-export interface Movie {
-  Title: string
-  Year: string
-  imdbID: string
-  Poster: string
-  Type: string
-}
+import MovieSearch from '@/components/movies/MovieSearch'
+import MovieList from '@/components/movies/MovieList'
+import { useCountStore } from '@/store/count'
 
 export default function App() {
-  const [movies, setMovies] = useState<Movie[]>([])
-
-  // useEffect(실행할함수, 의존성배열)
-  useEffect(function () {
-    async function fetchMovies() {
-      const res = await fetch('https://omdbapi.com/?apikey=7035c60c&s=spider')
-      const data = await res.json()
-      setMovies(data.Search)
-    }
-    fetchMovies()
-  }, [])
-
+  const count = useCountStore(state => state.count)
+  const increase = useCountStore(state => state.increase)
   return (
     <>
-      <ul>
-        {movies.map(function (movie) {
-          return (
-            <li key={movie.imdbID}>
-              <div>{movie.Title}</div>
-              <img
-                src={movie.Poster}
-                alt={movie.Title}
-              />
-            </li>
-          )
-        })}
-      </ul>
+      <h1 onClick={() => increase()}>{count}</h1>
+      <MovieSearch />
+      <MovieList />
     </>
   )
 }
