@@ -7,7 +7,7 @@ export const useCountStore = create(
     {
       count: 0
     },
-    (set, get) => ({
+    set => ({
       increase() {
         // const { count } = get()
         // set({
