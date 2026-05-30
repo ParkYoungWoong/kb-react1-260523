@@ -20,6 +20,5 @@ export default function Parent({ varient, children }: Props) {
         return <button>{children}</button>
     }
   }
-  ;``
   return <>{renderButton()}</>
 }

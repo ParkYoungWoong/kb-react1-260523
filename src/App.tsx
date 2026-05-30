@@ -1,19 +1,20 @@
-import { useEffect, useRef } from 'react'
+import { useState } from 'react'
+import Button from '@/components/Button'
 
 export default function App() {
-  const inputRef = useRef<HTMLInputElement>(null)
-
-  useEffect(function () {
-    // const inputEl = document.querySelector('input')
-    inputRef.current?.focus()
-  }, [])
-
+  const [isLoading, setIsLoading] = useState(false)
   return (
     <>
-      <input
-        ref={inputRef}
-        type="text"
-      />
+      <Button
+        loading={isLoading}
+        onClick={() => {
+          setIsLoading(true)
+          setTimeout(() => {
+            setIsLoading(false)
+          }, 1000)
+        }}>
+        검색
+      </Button>
     </>
   )
 }

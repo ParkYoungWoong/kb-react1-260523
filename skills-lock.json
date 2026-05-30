@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "skills": {
+    "kb-bank-styles": {
+      "source": "ParkYoungWoong/skills",
+      "sourceType": "github",
+      "skillPath": "skills/kb-bank-styles/SKILL.md",
+      "computedHash": "71ae46c9c7ea9e36a8443704bd36b27cd6e6a63b3b9b249fbd8ea4f6a6209f23"
+    },
+    "react-router-use": {
+      "source": "ParkYoungWoong/skills",
+      "sourceType": "github",
+      "skillPath": "skills/react-router-use/SKILL.md",
+      "computedHash": "17dabf32a5643845116066c9813e6035262fad6bcd6d103338c6f017ca1d8c79"
+    },
+    "zustand-use": {
+      "source": "ParkYoungWoong/skills",
+      "sourceType": "github",
+      "skillPath": "skills/zustand-use/SKILL.md",
+      "computedHash": "8d2c7b2075eacdbcfa7b0e8273a4e251d80e408cfdd30004a98a6015fd8c69b0"
+    }
+  }
+}
