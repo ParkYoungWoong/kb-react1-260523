@@ -23,12 +23,14 @@ const router = createBrowserRouter([
       },
       {
         path: '/movies',
-        element: <Movies />
-      },
-      {
-        // http://localhost:5173/movies/tt1234568
-        path: '/movies/:movieId',
-        element: <MovieDetails />
+        element: <Movies />,
+        children: [
+          {
+            // http://localhost:5173/movies/tt1234568
+            path: '/movies/:movieId',
+            element: <MovieDetails />
+          }
+        ]
       }
     ]
   }

@@ -1,6 +1,2 @@
 @import 'tailwindcss';
 @import './assets/kb-tokens.css';
-
-body {
-  height: 5000px;
-}
