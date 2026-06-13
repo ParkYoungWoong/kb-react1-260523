@@ -9,7 +9,8 @@ export default function SignIn() {
     const pw = formData.get('pw') as string
     if (id.trim() && pw.trim()) {
       // 로그인 성공!
-      const accessToken = 'helloworldB92E255C-1AFC-4772-8BCA-9AA4C91905B2' // 액세스 토큰
+      const accessToken =
+        'username=abc&email=xyz&photo=imageurl&expires=20260613170000' // 액세스 토큰
       localStorage.setItem('accessToken', accessToken)
       navigate('/')
     }
@@ -21,10 +22,12 @@ export default function SignIn() {
         <input
           type="text"
           name="id"
+          className="border"
         />
         <input
           type="password"
           name="pw"
+          className="border"
         />
         <button>로그인</button>
       </form>

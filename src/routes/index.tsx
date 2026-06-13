@@ -1,10 +1,12 @@
 import { createBrowserRouter, RouterProvider } from 'react-router'
+import Default from './layouts/Default'
 import Home from './pages/Home'
 import About from './pages/About'
 import Movies from './pages/Movies'
 import MovieDetails from './pages/MovieDetails'
 import NotFound from './pages/NotFound'
-import Default from './layouts/Default'
+import SignIn from './pages/SignIn'
+import { requiresAuth, guestOnly } from './loaders'
 
 // https://heropy.dev/movies/1234 // ✅
 // https://heropy.dev/#/movies/1234 // ❌
@@ -25,7 +27,7 @@ const router = createBrowserRouter([
       {
         path: '/movies',
         element: <Movies />,
-        loader: () => {},
+        loader: requiresAuth,
         children: [
           {
             // http://localhost:5173/movies/tt1234568
@@ -33,6 +35,11 @@ const router = createBrowserRouter([
             element: <MovieDetails />
           }
         ]
+      },
+      {
+        path: '/signin',
+        loader: guestOnly,
+        element: <SignIn />
       },
       {
         path: '*',
