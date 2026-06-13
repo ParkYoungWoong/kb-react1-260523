@@ -1,12 +1,15 @@
+import { lazy } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import Default from './layouts/Default'
 import Home from './pages/Home'
-import About from './pages/About'
+// import About from './pages/About'
 import Movies from './pages/Movies'
 import MovieDetails from './pages/MovieDetails'
 import NotFound from './pages/NotFound'
 import SignIn from './pages/SignIn'
 import { requiresAuth, guestOnly } from './loaders'
+
+const About = lazy(() => import('./pages/About'))
 
 // https://heropy.dev/movies/1234 // ✅
 // https://heropy.dev/#/movies/1234 // ❌

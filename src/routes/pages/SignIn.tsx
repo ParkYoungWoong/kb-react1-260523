@@ -1,7 +1,11 @@
-import { useNavigate } from 'react-router'
+import { useNavigate, useSearchParams } from 'react-router'
 
+// '/signin?a=123&s=spider&apikey=1234567890'
 export default function SignIn() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const redirectTo = searchParams.get('redirectTo') // '/movies'
+
   function signIn(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
@@ -12,7 +16,7 @@ export default function SignIn() {
       const accessToken =
         'username=abc&email=xyz&photo=imageurl&expires=20260613170000' // 액세스 토큰
       localStorage.setItem('accessToken', accessToken)
-      navigate('/')
+      navigate(redirectTo || '/')
     }
   }
   return (
