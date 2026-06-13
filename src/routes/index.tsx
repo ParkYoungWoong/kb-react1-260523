@@ -26,7 +26,8 @@ const router = createBrowserRouter([
         element: <Movies />
       },
       {
-        path: '/movies/:id',
+        // http://localhost:5173/movies/tt1234568
+        path: '/movies/:movieId',
         element: <MovieDetails />
       }
     ]

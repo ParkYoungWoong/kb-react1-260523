@@ -1,8 +1,5 @@
 /* KB Bank Style — Design Tokens (Tailwind v4 @theme) */
 
-/* KBFG 웹폰트 (KB금융그룹 전용 서체) */
-@import url('./fonts.css');
-
 @theme {
   --font-sans:
     'KBFG Text', 'Pretendard Variable', 'Pretendard', -apple-system,
