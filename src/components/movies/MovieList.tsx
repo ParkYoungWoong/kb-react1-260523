@@ -1,6 +1,7 @@
 import { useMovieStore } from '@/store/movie'
 import { Link } from 'react-router'
 
+// http://localhost:5173/movies/tt10872600?searchText=spider
 export default function MovieList() {
   const movies = useMovieStore(state => state.movies)
   return (

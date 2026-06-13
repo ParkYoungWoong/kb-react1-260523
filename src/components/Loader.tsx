@@ -1,25 +1,45 @@
-interface Props {
+import type { CSSProperties } from 'react'
+
+interface LoaderProps {
   size?: number
-  label?: string
+  color?: string
+  weight?: number
+  duration?: number
+  className?: string
 }
 
-export default function Loader({ size = 32, label }: Props) {
+export default function Loader({
+  size = 20,
+  color = '#0374FF',
+  weight = 3,
+  duration = 1,
+  className = ''
+}: LoaderProps) {
+  const loaderStyle: CSSProperties = {
+    width: size,
+    height: size,
+    borderWidth: weight,
+    borderStyle: 'solid',
+    borderColor: color,
+    borderTopColor: 'transparent',
+    borderRadius: '50%',
+    animation: `loader ${duration}s infinite linear`
+  }
+
   return (
-    <div
-      className="flex flex-col items-center justify-center gap-3"
-      role="status"
-      aria-live="polite">
-      <span
-        className="border-line border-t-kb-yellow box-border inline-block animate-spin rounded-full"
-        style={{
-          width: size,
-          height: size,
-          borderWidth: Math.max(2, Math.round(size / 10))
-        }}
-        aria-hidden
+    <>
+      <style>
+        {`
+          @keyframes loader {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}
+      </style>
+      <div
+        style={loaderStyle}
+        className={`absolute top-0 right-0 bottom-0 left-0 m-auto ${className}`}
       />
-      {label && <p className="text-ink-3 text-[13px] font-medium">{label}</p>}
-      <span className="sr-only">로딩 중</span>
-    </div>
+    </>
   )
 }
