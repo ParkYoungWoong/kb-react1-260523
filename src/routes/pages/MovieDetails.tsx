@@ -58,6 +58,11 @@ export default function MovieDetails() {
           <p>{movie.Genre}</p>
           <p>{movie.Director}</p>
           <p>{movie.Writer}</p>
+          <img
+            src={`https://img.omdbapi.com?apikey=7035c60c&i=${movie.imdbID}&h=1500`}
+            alt={movie.Title}
+          />
+          {/* 11:12 */}
         </>
       )}
     </>
