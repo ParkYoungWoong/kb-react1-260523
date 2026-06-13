@@ -31,12 +31,12 @@ export interface Movie {
   Website: string
   Response: string
 }
+
 export interface Rating {
   Source: string
   Value: string
 }
 
-// http://localhost:5173/movies/tt1234568?a=1&b=2&c=3
 export default function MovieDetails() {
   const { movieId } = useParams()
   const navigate = useNavigate()
@@ -46,20 +46,21 @@ export default function MovieDetails() {
 
   useEffect(() => {
     async function fetchMovie() {
-      await delay(3000)
+      await delay(4000)
       const res = await fetch(
         `https://omdbapi.com?apikey=7035c60c&i=${movieId}`
-      ) // 'GET'
+      )
+
       setMovie(await res.json())
       setIsLoading(false)
       await delay(2000)
       try {
         await loadImage(
-          `https://img.omdbapi.com?apikey=7035c60c&i=${movieId}&h=1500`
+          `https://omdbapi.com?apikey=7035c60c&i=${movieId}&h=1500`
         )
       } catch (error) {
         if (error instanceof Error) {
-          console.log(error.message)
+          console.error('이미지 로드에 실패했습니다??', error)
         }
       } finally {
         setIsImageLoading(false)
@@ -81,6 +82,7 @@ export default function MovieDetails() {
             <p>{movie.Genre}</p>
             <p>{movie.Director}</p>
             <p>{movie.Writer}</p>
+
             {isImageLoading ? (
               <div className="relative aspect-2/3 w-full rounded-[10px] bg-gray-300">
                 <Loader size={40} />
