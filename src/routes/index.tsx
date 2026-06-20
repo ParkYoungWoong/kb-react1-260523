@@ -1,15 +1,19 @@
-import { lazy } from 'react'
+import { lazy, Suspense } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import Default from './layouts/Default'
+import Empty from './layouts/Empty'
 import Home from './pages/Home'
 // import About from './pages/About'
 import Movies from './pages/Movies'
 import MovieDetails from './pages/MovieDetails'
-import NotFound from './pages/NotFound'
-import SignIn from './pages/SignIn'
+// import NotFound from './pages/NotFound'
+// import SignIn from './pages/SignIn'
 import { requiresAuth, guestOnly } from './loaders'
+import Loader from '@/components/Loader'
 
 const About = lazy(() => import('./pages/About'))
+const NotFound = lazy(() => import('./pages/NotFound'))
+const SignIn = lazy(() => import('./pages/SignIn'))
 
 // https://heropy.dev/movies/1234 // ✅
 // https://heropy.dev/#/movies/1234 // ❌
@@ -21,7 +25,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/about',
-        element: <About />
+        element: (
+          <Suspense fallback={<Loader />}>
+            <About />
+          </Suspense>
+        )
       },
       {
         path: '/',
@@ -43,7 +51,12 @@ const router = createBrowserRouter([
         path: '/signin',
         loader: guestOnly,
         element: <SignIn />
-      },
+      }
+    ]
+  },
+  {
+    element: <Empty />,
+    children: [
       {
         path: '*',
         element: <NotFound />
