@@ -11,7 +11,7 @@ export default function Button({ loading, children, ...restProps }: Props) {
   return (
     <button
       {...restProps}
-      className="bg-kb-yellow text-kb-black hover:bg-kb-yellow-strong inline-flex h-12 items-center justify-center rounded-[12px] px-5 text-[15px] font-bold transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40">
+      className="bg-kb-yellow text-kb-black hover:bg-kb-yellow-strong relative inline-flex h-12 items-center justify-center rounded-[12px] px-5 text-[15px] font-bold transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40">
       {loading ? <Loader size={20} /> : children}
     </button>
   )

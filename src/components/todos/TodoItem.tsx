@@ -1,6 +1,7 @@
 import type { Todo } from '@/store/todo'
 import { useState, useRef, useEffect } from 'react'
 import { useTodoStore } from '@/store/todo'
+import Button from '@/components/Button'
 
 interface Props {
   todo: Todo
@@ -12,6 +13,8 @@ export default function TodoItem({ todo }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const updateTodo = useTodoStore(s => s.updateTodo)
   const deleteTodo = useTodoStore(s => s.deleteTodo)
+  const isLoadingForUpdate = useTodoStore(s => s.isLoadingForUpdate)
+  const isLoadingForDelete = useTodoStore(s => s.isLoadingForDelete)
 
   useEffect(() => {
     inputRef.current?.focus()
@@ -19,6 +22,7 @@ export default function TodoItem({ todo }: Props) {
 
   function onEditMode() {
     setIsEditing(true)
+    setTitle(todo.title)
   }
   function offEditMode() {
     setIsEditing(false)
@@ -35,10 +39,11 @@ export default function TodoItem({ todo }: Props) {
   }
 
   return (
-    <li>
+    <li className="flex items-center justify-between gap-2 p-2 hover:bg-gray-200">
       {isEditing ? (
         <>
           <input
+            className="flex h-[40px] w-full rounded-md border p-2"
             ref={inputRef}
             type="text"
             value={title}
@@ -49,14 +54,24 @@ export default function TodoItem({ todo }: Props) {
               if (event.key === 'Enter') _updateTodo()
             }}
           />
-          <button onClick={() => offEditMode()}>취소</button>
-          <button onClick={() => _updateTodo()}>저장</button>
-          <button onClick={() => deleteTodo(todo)}>삭제</button>
+          <div className="flex shrink-0 items-center gap-2">
+            <Button onClick={() => offEditMode()}>취소</Button>
+            <Button
+              loading={isLoadingForUpdate}
+              onClick={() => _updateTodo()}>
+              저장
+            </Button>
+            <Button
+              loading={isLoadingForDelete}
+              onClick={() => deleteTodo(todo)}>
+              삭제
+            </Button>
+          </div>
         </>
       ) : (
         <>
-          <h3>{todo.title}</h3>
-          <button onClick={() => onEditMode()}>수정</button>
+          <h3 className="text-[18px]">{todo.title}</h3>
+          <Button onClick={() => onEditMode()}>수정</Button>
         </>
       )}
     </li>
