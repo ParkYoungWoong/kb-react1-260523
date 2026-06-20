@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import TodoItem from '@/components/todos/TodoItem'
 import { useTodoStore } from '@/store/todo'
+import Button from '@/components/Button'
+import Loader from '@/components/Loader'
 
 export default function Todos() {
   // const num = useXXXStore(() => 123)
@@ -9,6 +11,8 @@ export default function Todos() {
   const setTitle = useTodoStore(s => s.setTitle)
   const fetchTodos = useTodoStore(s => s.fetchTodos)
   const createTodo = useTodoStore(s => s.createTodo)
+  const isLoadingForFetch = useTodoStore(s => s.isLoadingForFetch)
+  const isLoadingForCreate = useTodoStore(s => s.isLoadingForCreate)
 
   useEffect(() => {
     fetchTodos()
@@ -28,7 +32,11 @@ export default function Todos() {
             if (event.key === 'Enter') createTodo()
           }}
         />
-        <button onClick={() => createTodo()}>추가</button>
+        <Button
+          loading={isLoadingForCreate}
+          onClick={() => createTodo()}>
+          추가
+        </Button>
       </div>
       <ul>
         {todos.map(todo => {
@@ -40,6 +48,12 @@ export default function Todos() {
           )
         })}
       </ul>
+      {isLoadingForFetch && (
+        <Loader
+          size={200}
+          className="fixed"
+        />
+      )}
     </>
   )
 }

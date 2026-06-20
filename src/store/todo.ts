@@ -24,43 +24,68 @@ export const useTodoStore = create(
   combine(
     {
       todos: [] as Todo[],
-      title: ''
+      title: '',
+      isLoadingForFetch: false,
+      isLoadingForCreate: false,
+      isLoadingForUpdate: false,
+      isLoadingForDelete: false
     }, // 상태 객체
     (set, get) => {
       function setTitle(title: string) {
         set({ title })
       }
       async function fetchTodos() {
-        const { data } = await todoApi.get<Todo[]>('/')
-        // setTodos(data)
-        set({
-          todos: data
-        })
+        try {
+          set({ isLoadingForFetch: true })
+          const { data } = await todoApi.get<Todo[]>('/')
+          set({ todos: data })
+        } catch (error) {
+          if (error instanceof Error) console.error(error.message)
+        } finally {
+          set({ isLoadingForFetch: false })
+        }
       }
       async function createTodo() {
         const { title, todos } = get()
         if (!title.trim()) return
         try {
+          set({ isLoadingForCreate: true })
           const { data } = await todoApi.post<Todo>('/', { title })
           set({
             todos: [data, ...todos],
             title: ''
           })
         } catch (error) {
-          if (error instanceof Error) {
-            return console.error(error.message)
-          }
-          return console.log(error)
+          if (error instanceof Error) console.error(error.message)
+        } finally {
+          set({ isLoadingForCreate: false })
         }
       }
       async function updateTodo({ id, title, done }: Todo) {
-        const { data } = await todoApi.put(`/${id}`, {
-          title,
-          done
-        })
-        fetchTodos()
+        try {
+          set({ isLoadingForUpdate: true })
+          await todoApi.put(`/${id}`, {
+            title,
+            done
+          })
+          fetchTodos()
+        } catch (error) {
+          if (error instanceof Error) return console.error(error.message)
+        } finally {
+          set({ isLoadingForUpdate: false })
+        }
       }
-      async function deleteTodo() {}
+      async function deleteTodo({ id }: Todo) {
+        try {
+          set({ isLoadingForDelete: true })
+          await todoApi.delete(`/${id}`)
+          fetchTodos()
+        } catch (error) {
+          if (error instanceof Error) return console.error(error.message)
+        } finally {
+          set({ isLoadingForDelete: false })
+        }
+      }
 
       return {
         setTitle,
