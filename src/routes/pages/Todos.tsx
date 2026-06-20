@@ -1,52 +1,18 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { useEffect } from 'react'
 import TodoItem from '@/components/todos/TodoItem'
-
-interface Todo {
-  id: string // 할 일 ID
-  order: number // 할 일 순서
-  title: string // 할 일 제목
-  done: boolean // 할 일 완료 여부
-  createdAt: string // 할 일 생성일
-  updatedAt: string // 할 일 수정일
-}
-
-const todoApi = axios.create({
-  baseURL: 'https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos',
-  headers: {
-    'content-type': 'application/json',
-    apikey: 'KDT8_bcAWVpD8',
-    username: 'KDT8_ParkYoungWoong'
-  }
-})
+import { useTodoStore } from '@/store/todo'
 
 export default function Todos() {
-  const [todos, setTodos] = useState<Todo[]>([])
-  const [title, setTitle] = useState('')
+  // const num = useXXXStore(() => 123)
+  const todos = useTodoStore(s => s.todos)
+  const title = useTodoStore(s => s.title)
+  const setTitle = useTodoStore(s => s.setTitle)
+  const fetchTodos = useTodoStore(s => s.fetchTodos)
+  const createTodo = useTodoStore(s => s.createTodo)
 
   useEffect(() => {
-    ;(async function () {
-      // Fetch: const res = await fetch()
-      //        const data = await res.json()
-      // Axios: const { data } = await axios()
-      const { data } = await todoApi.get('/')
-      setTodos(data)
-    })()
+    fetchTodos()
   }, [])
-
-  async function createTodo() {
-    if (!title.trim()) return
-    try {
-      const { data } = await todoApi.post<Todo>('/', { title })
-      setTodos([data, ...todos])
-      setTitle('')
-    } catch (error) {
-      if (error instanceof Error) {
-        return console.error(error.message)
-      }
-      return console.log(error)
-    }
-  }
 
   return (
     <>
@@ -66,7 +32,12 @@ export default function Todos() {
       </div>
       <ul>
         {todos.map(todo => {
-          return <li key={todo.id}>{todo.title}</li>
+          return (
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+            />
+          )
         })}
       </ul>
     </>

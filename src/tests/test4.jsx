@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react'
 
 export function Child() {
-  const divRef = useRef(null)
+  const divRef = useRef < HTMLInputElement > null
   useEffect(() => {
     divRef.current.focus()
   }, [])
