@@ -7,6 +7,7 @@ import Movies from './pages/Movies'
 import MovieDetails from './pages/MovieDetails'
 // import NotFound from './pages/NotFound'
 // import SignIn from './pages/SignIn'
+import Todos from './pages/Todos'
 import { requiresAuth, guestOnly } from './loaders'
 import Loader from '@/components/Loader'
 import { dynamic } from './dynamic'
@@ -67,6 +68,10 @@ const router = createBrowserRouter([
         path: '/signin',
         loader: guestOnly,
         element: <SignIn />
+      },
+      {
+        path: '/todos',
+        element: <Todos />
       }
     ]
   },
