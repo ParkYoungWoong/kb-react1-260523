@@ -26,7 +26,7 @@ export const useMovieStore = create(
       },
       async fetchMovies() {
         const { searchText } = get()
-        if (searchText.trim().length < 3) return
+        if (searchText.trim().length < 3) return []
         const res = await fetch(
           `https://omdbapi.com/?apikey=7035c60c&s=${searchText}`
         )
