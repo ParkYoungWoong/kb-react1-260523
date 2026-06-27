@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import { useTodoStore } from '@/store/todo'
 import { nanoid } from 'nanoid'
+// import { delay } from '@/utils'
 
 export interface Todo {
   id: string // 할 일 ID
@@ -39,6 +40,8 @@ export function useCreateTodo() {
       if (!title.trim()) return
       const { data } = await todoApi.post<Todo>('/', { title })
       return data
+      // await delay(3000)
+      // throw new Error('테스트 에러!')
     },
     onMutate: () => {
       const previousTodos = queryClient.getQueryData<Todo[]>(['todos'])
@@ -50,10 +53,55 @@ export function useCreateTodo() {
       }
       return previousTodos
     },
+    // onSuccess: (data, abc, previousTodos) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['todos'] })
     },
-    onError: () => {},
+    // onError: (error, abc, previousTodos) => {},
+    onError: (_error, _abc, previousTodos) => {
+      console.log(_error, _abc)
+      if (previousTodos) {
+        queryClient.setQueryData(['todos'], previousTodos)
+        alert('예상치 못한 에러가 발생했어요. 관리자에게 문의하세요~')
+      }
+    },
+    onSettled: () => {}
+  })
+}
+
+export function useUpdateTodo() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id, title, done }: Todo) => {
+      await todoApi.put(`/${id}`, {
+        title,
+        done
+      })
+    },
+    onMutate: todo => {
+      const previousTodos = queryClient.getQueryData<Todo[]>(['todos'])
+      if (previousTodos) {
+        queryClient.setQueryData(
+          ['todos'],
+          previousTodos.map(t => {
+            // if (t.id === todo.id) return todo
+            // return t
+            return t.id === todo.id ? todo : t
+          })
+        )
+      }
+      return previousTodos
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['todos'] })
+    },
+    onError: (_error, _todo, previousTodos) => {
+      console.log(_error, _todo)
+      if (previousTodos) {
+        queryClient.setQueryData(['todos'], previousTodos)
+        alert('예상치 못한 에러가 발생했어요. 관리자에게 문의하세요~')
+      }
+    },
     onSettled: () => {}
   })
 }
