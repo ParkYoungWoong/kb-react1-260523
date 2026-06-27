@@ -24,11 +24,11 @@ export const useMovieStore = create(
       setSearchText(searchText: string) {
         set({ searchText })
       },
-      async fetchMovies() {
+      async fetchMovies(pageParam: number) {
         const { searchText } = get()
         if (searchText.trim().length < 3) return null
         const res = await fetch(
-          `https://omdbapi.com/?apikey=7035c60c&s=${searchText}`
+          `https://omdbapi.com/?apikey=7035c60c&s=${searchText}&page=${pageParam}`
         )
         const data: ResponseValue = await res.json()
         // set({

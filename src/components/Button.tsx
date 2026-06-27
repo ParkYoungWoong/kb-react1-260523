@@ -1,9 +1,14 @@
-import type { ReactNode, ButtonHTMLAttributes } from 'react'
+import type { ReactNode, ButtonHTMLAttributes, RefObject } from 'react'
 import Loader from '@/components/Loader'
 
 // interface Props extends React.ButtonHTMLAttributes<> { // React Namespace 사용 시..
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+  ref?:
+    | RefObject<HTMLButtonElement>
+    | ((element: Element | null | undefined) => () => void)
+    | undefined
   loading?: boolean
+  className?: string
   children?: ReactNode
 }
 

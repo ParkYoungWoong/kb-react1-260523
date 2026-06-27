@@ -1,22 +1,15 @@
-import { useEffect } from 'react'
 import TodoItem from '@/components/todos/TodoItem'
 import { useTodoStore } from '@/store/todo'
 import Button from '@/components/Button'
 import Loader from '@/components/Loader'
+import { useFetchTodos } from '@/hooks/todo'
 
 export default function Todos() {
-  // const num = useXXXStore(() => 123)
-  const todos = useTodoStore(s => s.todos)
   const title = useTodoStore(s => s.title)
   const setTitle = useTodoStore(s => s.setTitle)
-  const fetchTodos = useTodoStore(s => s.fetchTodos)
   const createTodo = useTodoStore(s => s.createTodo)
-  const isLoadingForFetch = useTodoStore(s => s.isLoadingForFetch)
   const isLoadingForCreate = useTodoStore(s => s.isLoadingForCreate)
-
-  useEffect(() => {
-    fetchTodos()
-  }, [])
+  const { data: todos, isLoading } = useFetchTodos()
 
   return (
     <>
@@ -39,7 +32,7 @@ export default function Todos() {
         </Button>
       </div>
       <ul>
-        {todos.map(todo => {
+        {todos?.map(todo => {
           return (
             <TodoItem
               key={todo.id}
@@ -48,7 +41,7 @@ export default function Todos() {
           )
         })}
       </ul>
-      {isLoadingForFetch && (
+      {isLoading && (
         <Loader
           size={200}
           className="fixed"
