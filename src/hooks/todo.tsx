@@ -1,5 +1,7 @@
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
+import { useTodoStore } from '@/store/todo'
+import { nanoid } from 'nanoid'
 
 export interface Todo {
   id: string // 할 일 ID
@@ -20,7 +22,7 @@ const todoApi = axios.create({
 })
 
 export function useFetchTodos() {
-  return useQuery({
+  return useQuery<Todo[]>({
     queryKey: ['todos'],
     queryFn: async () => {
       const { data } = await todoApi.get<Todo[]>('/')
@@ -30,5 +32,28 @@ export function useFetchTodos() {
 }
 
 export function useCreateTodo() {
-  return useMutation({})
+  const title = useTodoStore(state => state.title)
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async () => {
+      if (!title.trim()) return
+      const { data } = await todoApi.post<Todo>('/', { title })
+      return data
+    },
+    onMutate: () => {
+      const previousTodos = queryClient.getQueryData<Todo[]>(['todos'])
+      if (previousTodos) {
+        queryClient.setQueryData(
+          ['todos'],
+          [{ id: nanoid(10), title }, ...previousTodos]
+        )
+      }
+      return previousTodos
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['todos'] })
+    },
+    onError: () => {},
+    onSettled: () => {}
+  })
 }

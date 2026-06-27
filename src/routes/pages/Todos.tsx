@@ -2,14 +2,13 @@ import TodoItem from '@/components/todos/TodoItem'
 import { useTodoStore } from '@/store/todo'
 import Button from '@/components/Button'
 import Loader from '@/components/Loader'
-import { useFetchTodos } from '@/hooks/todo'
+import { useFetchTodos, useCreateTodo } from '@/hooks/todo'
 
 export default function Todos() {
   const title = useTodoStore(s => s.title)
   const setTitle = useTodoStore(s => s.setTitle)
-  const createTodo = useTodoStore(s => s.createTodo)
-  const isLoadingForCreate = useTodoStore(s => s.isLoadingForCreate)
   const { data: todos, isLoading } = useFetchTodos()
+  const { mutate: createTodo, isPending } = useCreateTodo()
 
   return (
     <>
@@ -26,7 +25,7 @@ export default function Todos() {
           }}
         />
         <Button
-          loading={isLoadingForCreate}
+          loading={isPending}
           onClick={() => createTodo()}>
           추가
         </Button>
