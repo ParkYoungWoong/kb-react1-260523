@@ -1,9 +1,17 @@
 import { useMovieStore } from '@/store/movie'
 import { Link } from 'react-router'
+import { useQuery } from '@tanstack/react-query'
 
 // http://localhost:5173/movies/tt10872600?searchText=spider
 export default function MovieList() {
-  const movies = useMovieStore(state => state.movies)
+  const fetchMovies = useMovieStore(state => state.fetchMovies)
+  const searchText = useMovieStore(state => state.searchText)
+  const { data } = useQuery({
+    queryKey: ['movies', searchText],
+    queryFn: fetchMovies,
+    staleTime: 1000 * 60 * 60 * 2, // ms
+    enabled: Boolean(searchText)
+  })
   return (
     <ul>
       {movies.map(movie => {

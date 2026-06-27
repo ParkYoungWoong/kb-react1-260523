@@ -18,8 +18,7 @@ export interface Movie {
 export const useMovieStore = create(
   combine(
     {
-      searchText: '',
-      movies: [] as Movie[]
+      searchText: ''
     },
     (set, get) => ({
       setSearchText(searchText: string) {
@@ -32,9 +31,10 @@ export const useMovieStore = create(
           `https://omdbapi.com/?apikey=7035c60c&s=${searchText}`
         )
         const data: ResponseValue = await res.json()
-        set({
-          movies: data.Search || []
-        })
+        // set({
+        //   movies: data.Search || []
+        // })
+        return data.Search || []
       }
     })
   )
