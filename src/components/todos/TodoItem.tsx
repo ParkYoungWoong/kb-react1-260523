@@ -1,8 +1,7 @@
 import type { Todo } from '@/store/todo'
 import { useState, useRef, useEffect } from 'react'
-import { useTodoStore } from '@/store/todo'
 import Button from '@/components/Button'
-import { useUpdateTodo } from '@/hooks/todo'
+import { useUpdateTodo, useDeleteTodo } from '@/hooks/todo'
 
 interface Props {
   todo: Todo
@@ -12,10 +11,9 @@ export default function TodoItem({ todo }: Props) {
   const [isEditing, setIsEditing] = useState(false)
   const [title, setTitle] = useState(todo.title)
   const inputRef = useRef<HTMLInputElement>(null)
-  const deleteTodo = useTodoStore(s => s.deleteTodo)
-  const isLoadingForDelete = useTodoStore(s => s.isLoadingForDelete)
   const { mutateAsync: updateTodo, isPending: isLoadingForUpdate } =
     useUpdateTodo()
+  const { mutate: deleteTodo, isPending: isLoadingForDelete } = useDeleteTodo()
 
   useEffect(() => {
     inputRef.current?.focus()

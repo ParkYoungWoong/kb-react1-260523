@@ -3,6 +3,8 @@ import axios from 'axios'
 import { useTodoStore } from '@/store/todo'
 import { nanoid } from 'nanoid'
 // import { delay } from '@/utils'
+import { create } from 'zustand'
+import { combine } from 'zustand/middleware'
 
 export interface Todo {
   id: string // 할 일 ID
@@ -21,6 +23,8 @@ const todoApi = axios.create({
     username: 'KDT8_ParkYoungWoong'
   }
 })
+
+export const useTodoStore = create(combine())
 
 export function useFetchTodos() {
   return useQuery<Todo[]>({
@@ -91,6 +95,40 @@ export function useUpdateTodo() {
         )
       }
       return previousTodos
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['todos'] })
+    },
+    onError: (_error, _todo, previousTodos) => {
+      console.log(_error, _todo)
+      if (previousTodos) {
+        queryClient.setQueryData(['todos'], previousTodos)
+        alert('예상치 못한 에러가 발생했어요. 관리자에게 문의하세요~')
+      }
+    },
+    onSettled: () => {}
+  })
+}
+
+export function useDeleteTodo() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id }: Todo) => {
+      await todoApi.delete(`/${id}`)
+    },
+    onMutate: ({ id }) => {
+      const previousTodos = queryClient.getQueryData<Todo[]>(['todos'])
+      if (previousTodos) {
+        queryClient.setQueryData(
+          ['todos'],
+          previousTodos.filter(t => {
+            return t.id !== id
+          })
+        )
+      }
+      return previousTodos
+      // !=, !==
+      // ==, ===
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['todos'] })
