@@ -1,8 +1,8 @@
 import TodoItem from '@/components/todos/TodoItem'
-import { useTodoStore } from '@/store/todo'
+// import { useTodoStore } from '@/hooks/todo'
 import Button from '@/components/Button'
 import Loader from '@/components/Loader'
-import { useFetchTodos, useCreateTodo } from '@/hooks/todo'
+import { useFetchTodos, useCreateTodo, useTodoStore } from '@/hooks/todo'
 
 export default function Todos() {
   const title = useTodoStore(s => s.title)

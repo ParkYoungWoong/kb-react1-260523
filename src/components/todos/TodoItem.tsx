@@ -1,4 +1,4 @@
-import type { Todo } from '@/store/todo'
+import type { Todo } from '@/hooks/todo'
 import { useState, useRef, useEffect } from 'react'
 import Button from '@/components/Button'
 import { useUpdateTodo, useDeleteTodo } from '@/hooks/todo'

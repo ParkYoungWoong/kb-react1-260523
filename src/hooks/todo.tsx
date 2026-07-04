@@ -1,6 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
-import { useTodoStore } from '@/store/todo'
 import { nanoid } from 'nanoid'
 // import { delay } from '@/utils'
 import { create } from 'zustand'
@@ -24,7 +23,18 @@ const todoApi = axios.create({
   }
 })
 
-export const useTodoStore = create(combine())
+export const useTodoStore = create(
+  combine(
+    {
+      title: ''
+    },
+    set => ({
+      setTitle(title: string) {
+        set({ title })
+      }
+    })
+  )
+)
 
 export function useFetchTodos() {
   return useQuery<Todo[]>({
