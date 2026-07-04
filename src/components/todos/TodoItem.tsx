@@ -38,11 +38,11 @@ export default function TodoItem({ todo }: Props) {
   }
 
   return (
-    <li className="flex items-center justify-between gap-2 p-2 hover:bg-gray-200">
+    <li className="hover:bg-bg flex items-center gap-3 px-5 py-3 transition-colors">
       {isEditing ? (
         <>
           <input
-            className="flex h-[40px] w-full rounded-md border p-2"
+            className="border-line-2 bg-surface text-ink focus:border-kb-yellow focus:ring-kb-yellow/40 h-11 w-full min-w-0 flex-1 rounded-[12px] border px-4 text-[15px] transition outline-none focus:ring-2"
             ref={inputRef}
             type="text"
             value={title}
@@ -54,13 +54,22 @@ export default function TodoItem({ todo }: Props) {
             }}
           />
           <div className="flex shrink-0 items-center gap-2">
-            <Button onClick={() => offEditMode()}>취소</Button>
             <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => offEditMode()}>
+              취소
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
               loading={isLoadingForUpdate}
               onClick={() => _updateTodo()}>
               저장
             </Button>
             <Button
+              variant="danger"
+              size="sm"
               loading={isLoadingForDelete}
               onClick={() => deleteTodo(todo)}>
               삭제
@@ -69,8 +78,15 @@ export default function TodoItem({ todo }: Props) {
         </>
       ) : (
         <>
-          <h3 className="text-[18px]">{todo.title}</h3>
-          <Button onClick={() => onEditMode()}>수정</Button>
+          <h3 className="text-ink min-w-0 flex-1 truncate text-[16px] font-medium">
+            {todo.title}
+          </h3>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => onEditMode()}>
+            수정
+          </Button>
         </>
       )}
     </li>
